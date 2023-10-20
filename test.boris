@@ -1,0 +1,10 @@
+include iostream
+
+a = 4
+
+fn test_my_func (a, b, c)
+	d = a + b + c
+	return d
+
+main:
+	std::cout << "Hello World"
