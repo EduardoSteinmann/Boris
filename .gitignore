@@ -1,2 +1,5 @@
 *.json
 *.exe
+*.boris
+*.gitignore
+test_files
