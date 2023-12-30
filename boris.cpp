@@ -666,6 +666,11 @@ int main(int argc, char* argv[])
         {
             translate_file(std::string(argv[2]));
         }
+        else
+        {
+            fprintf(stderr, "Error: Expected second argument to be \"compile\", instead found \"%s\"", argv[1]);
+            return 1;
+        }
     }
     return 0;
 }
