@@ -1,5 +1,5 @@
 # What is Boris?
-Boris is a code generator that takes code written in "Boris" and produces C files from it.
+Boris (named after my best friend's cat) is a code generator that takes code written in "Boris" with a Go based syntax and produces C files from it.
 
 # Features
 Syntactic Sugar:
