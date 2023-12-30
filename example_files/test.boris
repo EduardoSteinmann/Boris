@@ -1,0 +1,30 @@
+import import_test.boris
+
+fn main() int
+{
+    s := (StrLit){ "Hello World" }
+    printf("%s", s)
+    a := 4
+    f := 6
+    if true
+    {
+        printf("Inside if statement")
+    }
+    else if false
+    {
+        printf("Testing else if")
+    }
+    else
+    {
+        printf("Else Statement")
+    }
+    
+    for size_t i = 0; i < 1; i++
+    {
+        d mut := 5
+        printf("Inside for loop")
+    }
+
+    printf("Hello World")
+    return 0
+}

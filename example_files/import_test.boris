@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+extern int ml = 8000
+
+typedef int NUMBER
+
+enum Test
+{
+    ONE,
+    ZERO,
+    CONFUSING,
+}
+
+struct StrLit
+{
+    const char* str_lit
+}
+
+struct Foo
+{
+    const char* bar
+    Foo* next
+    union Baz
+    {
+        int f
+        struct K
+        {
+            int d
+        }
+    }
+}
+
+fn print(const char* s) void
+{
+    puts(s)
+}
+
+fn hello_world() void
+{
+    print("Hello World")
+}
