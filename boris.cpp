@@ -2,10 +2,13 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <cstdio>
 #include <fstream>
 #include <unordered_map>
 #include <filesystem>
 #include <algorithm>
+
+constexpr const char* BORIS_VERSION = "0.1.0";
 
 enum class TokenType
 {
@@ -583,9 +586,9 @@ std::string generate_line(const std::vector<Token>& tokens, const std::string& l
 int translate_file(const std::string& file_name)
 {
     std::ifstream src_file = std::ifstream(file_name);
-    std::filesystem::create_directory("boris_files");
-    std::ofstream c_file = std::ofstream("boris_files/" + file_name + ".c");
-    std::ofstream h_file = std::ofstream("boris_files/" + file_name + ".h");
+    //std::filesystem::create_directory("boris_files");
+    std::ofstream c_file = std::ofstream(file_name + ".c");
+    std::ofstream h_file = std::ofstream(file_name + ".h");
 
     std::string line = "";
     ForwardDeclrs forward_declrs = {};
@@ -658,7 +661,7 @@ int main(int argc, char* argv[])
             fprintf(stderr, "Error: Expected argument --version after boris.");
             return 1;
         }
-        printf("0.10.0");
+        printf("%s", BORIS_VERSION);
     }
     else if (argc > 2)
     {

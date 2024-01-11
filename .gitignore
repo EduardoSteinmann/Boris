@@ -1,4 +1,6 @@
 *.json
 *.exe
+.vscode
 *.gitignore
 boris_files
+releases
