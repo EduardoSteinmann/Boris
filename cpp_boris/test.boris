@@ -1,0 +1,11 @@
+#include <stdio.h>
+import other_file
+
+fn main() int:
+    printf("hello world")
+    test := 400.9
+    printf("%d", test)
+    if test == 400:
+        printf("in if statement")
+    foo := 5
+    return 0

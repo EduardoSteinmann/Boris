@@ -14,6 +14,7 @@ enum class TokenType
 {
     LEFT_BRACE, RIGHT_BRACE,
     LEFT_PAREN, RIGHT_PAREN,
+    AND, AMPERSAND,
     INIT_EQUAL,
     FN,
     ELSE, IF, ELIF, 
@@ -101,6 +102,16 @@ class Lexer
             case '#': 
                 while (peek_next() != '\n' && !reached_end()) next();
                 add_token(TokenType::PREPROCESSOR_DIRECTIVE);
+                break;
+            case '&': 
+                if (peek_next() == '&')
+                {
+                    add_token(TokenType::AND); 
+                }
+                else 
+                {
+                    add_token(TokenType::AMPERSAND); 
+                }
                 break;
             case ' ':
             case '\t':
@@ -222,6 +233,21 @@ const std::string to_upper_case(std::string str)
 {
     std::transform(str.begin(), str.end(), str.begin(), ::toupper);
     return str;
+}
+
+const std::string translate_universal_call_syntax(const std::vector<Token>& tokens, const std::string& line, const std::string trimmed_line)
+{
+    for (size_t i = 0; i < tokens.size(); i++)
+    {
+        const Token& token = tokens[i];
+
+        //replace other with identifier
+        if (token.type != TokenType::AMPERSAND && token.type != TokenType::OTHER)
+        {
+            continue;
+        }
+        
+    }
 }
 
 std::string generate_line(const std::vector<Token>& tokens, const std::string& line, const std::string trimmed_line, ForwardDeclrs& forward_declrs, bool& in_global_scope, size_t& braces_count)
