@@ -1,0 +1,42 @@
+Boris Pseudocode
+
+Features to add:
+typedef
+multiple return values
+@ compile time resolution
+binary literals (will get converted to decimal at compile time)
+defer statements
+Unkown Type for unresolved deduction
+Generics
+
+
+Features to remove:
+const
+
+struct Variable
+{
+    Type type;
+    string name;
+    Cvar current_c_var;
+};
+
+struct Cvar
+{
+   CType type;
+   string name;
+};
+
+struct Function
+{
+   Type return_type;
+   Type parameter_types[];
+   Variable vars[];
+   Cvar c_vars[];
+};
+
+struct Type
+{
+   Category type_category;
+   string name;
+    
+};

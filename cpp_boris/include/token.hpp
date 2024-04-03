@@ -121,7 +121,7 @@ struct Token
 {
     TokenType token_type;
     size_t line_num;
-    std::string content_slice;
+    std::string content;
 
     #ifdef DEBUG
     void print() const
@@ -203,7 +203,7 @@ struct Token
         token_type_reprs[static_cast<size_t>(TokenType::STR)] = "STR";
         token_type_reprs[static_cast<size_t>(TokenType::TRUE)] = "TRUE";
         token_type_reprs[static_cast<size_t>(TokenType::FALSE)] = "FALSE";
-        std::cout << "Token { token_type = " << token_type_reprs[static_cast<size_t>(this->token_type)] << ", line_num = " << this->line_num << ", content = " << this->content_slice << " }\n";
+        std::cout << "Token { token_type = " << token_type_reprs[static_cast<size_t>(this->token_type)] << ", line_num = " << this->line_num << ", content = " << this->content << " }\n";
     }
     #endif
 };

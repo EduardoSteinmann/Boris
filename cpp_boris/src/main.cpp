@@ -22,7 +22,8 @@ void compile()
 {
     std::string file = read_file();
     Lexer lexer = Lexer(file);
-    lexer.parse_file();
+    std::vector<Token> tokens = lexer.parse_file();
+    
 }
 
 int main()

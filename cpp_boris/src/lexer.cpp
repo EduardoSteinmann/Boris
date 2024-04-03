@@ -412,7 +412,7 @@ Token Lexer::handle_char_literal()
 
     if (second_next_char != '\'')
     {
-        //error
+        //TODO: error
     }
 
     this->file_it++;
@@ -455,7 +455,7 @@ Token Lexer::handle_number_literals()
 
         if (!isdigit(this->peek()))
         {
-            //error
+            //TODO: error
         }
         
         file_it++;

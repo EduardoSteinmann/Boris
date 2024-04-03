@@ -1,11 +1,23 @@
-#include <stdio.h>
-import other_file
+@stdio := @c_include("stdio.h")
+@other_file := @import("other_file")
 
-fn main() int:
-    printf("hello world")
+fn (Int* self) receiver_test(Int a) Int:
+    return *self + a
+
+fn generic_test[T](T a) T:
+    return a
+
+fn add(a: Int, b: Int) Int:
+    return a + b
+
+fn main():
+    @other_file.other_func()
+    generic_test[Int](5)
+    integer := 4
+    integer.receiver_test(4)
+    @stdio.printf("hello world")
     test := 400.9
     printf("%d", test)
     if test == 400:
         printf("in if statement")
     foo := 5
-    return 0
