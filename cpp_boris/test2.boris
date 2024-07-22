@@ -1,0 +1,12 @@
+fn add(a: Int, b: Int) Int:
+    return a + b
+
+struct My:
+    a: Int = 0
+
+fn main() Int:
+    b := add(4, 5)
+    c := b
+    d := b + c
+    my_str := "Hello"
+    return 0

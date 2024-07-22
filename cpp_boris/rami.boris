@@ -1,0 +1,11 @@
+import vec
+import stdio
+
+fn my_fn(l: vec.Vec[vec.Vec[vec.Vec[Int]]]):
+    stdio.printf("Hello World")
+
+fn fn2(ptr: Int**) Int:
+    return **ptr
+
+fn normal(p: Float):
+    stdio.printf("%lf", p)

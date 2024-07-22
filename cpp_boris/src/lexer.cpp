@@ -40,6 +40,11 @@ std::vector<Token> Lexer::parse_file()
     {
         Token token = this->parse_token();
 
+        if (token.token_type == TokenType::IGNORE)
+        {
+            continue;
+        }
+
         #ifdef DEBUG
         token.print();
         #endif
@@ -64,13 +69,14 @@ std::unordered_map<std::string, TokenType> Lexer::keywords =
     { "case", TokenType::CASE },
     { "struct", TokenType::STRUCT },
     { "enum", TokenType::ENUM },
-    { "typedef", TokenType::TYPEDEF },
+    { "alias", TokenType::ALIAS },
     { "return", TokenType::RETURN },
     { "true", TokenType::TRUE },
     { "false", TokenType::FALSE },
     { "and", TokenType::AND },
     { "or", TokenType::OR },
     { "not", TokenType::NOT },
+    { "try", TokenType::TRY },
 };
 
 Lexer::TokenFunc Lexer::character_token_funcs[ASCII_TABLE_SIZE] = {};
@@ -81,9 +87,9 @@ Token Lexer::parse_token()
 
     const char current_character = *this->file_it;
 
-    if (character_token_funcs[static_cast<size_t>(current_character)])
+    if (character_token_funcs[static_cast<uint64_t>(current_character)])
     {
-        return (this->*character_token_funcs[static_cast<size_t>(current_character)])();
+        return (this->*character_token_funcs[static_cast<uint64_t>(current_character)])();
     }
 
     if (isdigit(current_character))
@@ -101,6 +107,11 @@ Token Lexer::parse_token()
     {
         file_it++;
         potential_identifier += *file_it;
+    }
+
+    if (potential_identifier.empty())
+    {
+        //TODO: error
     }
 
     if (keywords.find(potential_identifier) != keywords.end())
@@ -343,17 +354,23 @@ Token Lexer::handle_bitwise_or()
     return Token { type, this->line_num, std::string(this->begin_parse, this->file_it + 1) };
 }
 
+//hashes are comments, so they will be ignored
 Token Lexer::handle_hash()
 {
     while (this->file_it != file.end() && *this->file_it != '\n')
     {
         this->file_it++;
     }
-    return Token { TokenType::COMMENT, this->line_num, std::string(this->begin_parse, this->file_it + 1) };
+    return Token { TokenType::IGNORE, this->line_num, "" };
 }
 
 Token Lexer::handle_carriage_return()
 {
+    //TODO: check if - 1 is safe
+    if (*(file_it - 1) != '\n')
+    {
+        return Token { TokenType::IGNORE, this->line_num, "" };
+    }
     return Token { TokenType::CARRIAGE_RETURN, this->line_num, std::string(this->begin_parse, this->file_it + 1) };
 }
 
@@ -365,6 +382,12 @@ Token Lexer::handle_new_line()
 
 Token Lexer::handle_spaces()
 {
+    //TODO: check if - 1 is safe
+    if (*(file_it - 1) != '\n')
+    {
+        return Token { TokenType::IGNORE, this->line_num, "" };
+    }
+
     while (this->peek() == ' ')
     {
         this->file_it++;
@@ -374,6 +397,11 @@ Token Lexer::handle_spaces()
 
 Token Lexer::handle_tab()
 {
+    //TODO: check if - 1 is safe
+    if (*(file_it - 1) != '\n')
+    {
+        return Token { TokenType::IGNORE, this->line_num, "" };
+    }
     return Token { TokenType::TAB, this->line_num, std::string(this->begin_parse, this->file_it + 1) };
 }
 
@@ -436,7 +464,7 @@ Token Lexer::handle_str_literal()
 
     if (this->file_it == file.end())
     {
-        //error
+        //TODO: error
     }
 
     return Token { TokenType::STR, this->line_num, std::string(this->begin_parse, this->file_it + 1) };

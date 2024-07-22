@@ -16,7 +16,7 @@ class Lexer
     const std::string& file;
     std::string::const_iterator file_it;
     std::string::const_iterator begin_parse;
-    size_t line_num;
+    uint64_t line_num = 1;
 
     using TokenFunc = Token(Lexer::*)();
     static TokenFunc character_token_funcs[ASCII_TABLE_SIZE];
