@@ -116,6 +116,8 @@ enum class TokenType
 
     IGNORE, //Token to ignore being appended
 
+    EOF_, //End of File token
+
     NUMBER_OF_TOKEN_TYPES
 };
 

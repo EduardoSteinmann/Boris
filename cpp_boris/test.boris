@@ -1,5 +1,8 @@
 import stdio
 import other_file
+import std
+
+List := std.List
 
 fn receiver_test(self: Int*, a: Int) Int:
     return *self + a
@@ -8,7 +11,7 @@ fn add(a: Int, b: Int) Int:
     return a + b
 
 struct My:
-    a: Int,
+    a: Int
     b: Float
 
     fn method(self: My*) Float:

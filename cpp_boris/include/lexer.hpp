@@ -10,7 +10,7 @@ class Lexer
     public:
     Lexer(const std::string& file_ref);
 
-    std::vector<Token> parse_file();
+    std::vector<std::vector<Token>> tokenize_file();
 
     private:
     const std::string& file;

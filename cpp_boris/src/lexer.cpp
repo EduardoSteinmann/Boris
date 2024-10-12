@@ -33,9 +33,10 @@ Lexer::Lexer(const std::string& file_ref): file(file_ref)
     character_token_funcs['"'] = Lexer::handle_str_literal;
 }
 
-std::vector<Token> Lexer::parse_file()
+std::vector<std::vector<Token>> Lexer::tokenize_file()
 {
-    std::vector<Token> tokens = {};
+    std::vector<std::vector<Token>> tokens = {};
+    std::vector<Token> line = {};
     for (this->file_it = this->file.begin(); this->file_it != this->file.end(); this->file_it++)
     {
         Token token = this->parse_token();
@@ -49,7 +50,13 @@ std::vector<Token> Lexer::parse_file()
         token.print();
         #endif
 
-        tokens.push_back(token);
+        line.push_back(token);
+
+        if (token.token_type == TokenType::NEWLINE)
+        {
+            tokens.push_back(line);
+            line.clear();
+        }
     }
     return tokens;
 }

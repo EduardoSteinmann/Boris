@@ -1,177 +1,96 @@
-#ifndef EXPRESSION
-#define EXPRESSION
+#ifndef BORIS_EXPRESSION
+#define BORIS_EXPRESSION
 
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include <token.hpp>
 #include <variant>
+#include <type.hpp>
 
-// enum class ExpressionType
-// {
-//     INTEGER,
-//     FLOAT,
-//     STRING,
-//     ASSIGNMENT,
-//     MULTIPLE_ASSIGNMENT,
-//     FUNC_CALL,
-//     IMPORT,
-//     COMPILE_TIME_CONSTANT,
-//     METHOD_CALL,
-//     IF,
-//     ELIF,
-//     ELSE,
-//     WHILE,
-//     DO_WHILE,
-//     FOR,
-//     FUNC_DEF,
-// };
+#include "statement.hpp"
 
-// struct Expression
-// {
-//     using TokenLine = std::pair<std::vector<Token>::const_iterator, std::vector<Token>::const_iterator>;
-//     ExpressionType expression_type;
-//     std::vector<Expression> nested_expressions;
-//     TokenLine tokens_contained;
-// };
+struct BinaryOp;
+struct LogicalOp;
+struct MemberAccess;
+struct Dereference;
+struct UnaryOp;
+struct Grouping;
+struct CompoundInitializer;
+struct Ternary;
+struct Variable;
+struct FunctionCall;
+struct MethodCall;
+struct Literal;
 
-// class ExpressionParser
-// {
-//     public:
-//     ExpressionParser(const std::vector<Token>& tokens);
-//     std::vector<Expression> parse_expressions();
-
-//     private:
-//     using ExpressionParse = Expression(ExpressionParser::*)();
-//     ExpressionParse parser_functions[static_cast<size_t>(TokenType::NUMBER_OF_TOKEN_TYPES)];
-
-//     const std::vector<Token>& tokens;
-//     const std::vector<Token>::const_iterator current_token;
-
-//     Expression::TokenLine read_next_line_of_tokens();
-// };
-
-enum class StatementType
+struct BinaryOp: Expression
 {
-    //MODULE statement exists to have the module as the first statement in the list
-    MODULE,
-    IMPORT,
-    FUNCTION,
-    STRUCT,
-    ENUM,
-    UNION,
-    FOR,
-    WHILE,
-    IF,
-    ELIF,
-    ELSE,
-    INIT,
-    ASSIGNMENT,
-    PARAM_OR_FIELD,
-    MULTIPLE_ASSIGNMENT,
-    RETURN,
-    DEFER,
+    std::unique_ptr<Expression> left, right;
+    Token operation;
 };
 
-enum class ExpressionType
+struct LogicalOp: Expression
 {
-    BINARY_OP,
-    LOGICAL_OP,
-    MEMBER_ACCESS,
-    DEREFERENCE,
-    UNARY_OP,
-    GROUPING,
-    COMPOUND_INITIALIZER,
-    VARIABLE,
-    FUNCTION_CALL,
-    METHOD_CALL,
-    INTEGER,
-    FLOAT,
-    STR,
-    BOOL,
+    std::unique_ptr<Expression> left, right;
+    Token operation;
 };
 
-enum class ValueType
+struct MemberAccess: Expression
 {
-    VARIABLE,
-    MODULE,
-    FUNCTION,
-    STRUCT,
-    ENUM,
-    UNION,
+    std::unique_ptr<Expression> object;
+    Token name;
 };
 
-struct Expression;
-
-struct Statement;
-
-struct Type
+struct Dereference: Expression
 {
-    uint64_t array_size = 0;
-    uint64_t ptr_indirections = 0;
-    std::string raw_type_name;
-    std::string core_type_name;
-    std::vector<std::string> module_localizations;
-    std::vector<Type> nested_types;
+    std::vector<Token> dereferences;
+    std::unique_ptr<Expression> pointer;
 };
 
-//using Type = std::string;
-using State = std::unordered_map<std::string, Value>;
-
-struct Module
+struct Grouping: Expression
 {
-    std::string name;
-    State globals;
+    std::unique_ptr<Expression> expr;
 };
 
-struct ImportStatement
+struct CompoundInitializer: Expression
 {
-    std::string module_name;
-    std::string module_alias;
+    Type type;
+    std::vector<std::unique_ptr<Expression>> dot_inits;
 };
 
-struct Function
+struct Ternary: Expression
 {
-    std::string name;
-    std::vector<Type> return_type;
-    std::vector<Statement> parameters;
-    std::vector<Statement> generics;
-    std::vector<Statement> lines;
-    State local_state;
+    std::unique_ptr<Expression> if_case;
+    std::unique_ptr<Expression> else_case;
 };
 
-struct If
+struct Variable: Expression
 {
-    //TODO: Maybe change to bool
-    std::vector<Statement> condition;
-    std::vector<Statement> lines;
-    State local_state;
-};
-
-struct Else
-{
-    std::vector<Statement> lines;
-    State local_state;
-};
-
-struct Variable
-{
-    std::string name;
+    Token name;
     Type data_type;
 };
 
-struct Struct
+struct FunctionCall: Expression
 {
-    std::string name;
-    State members;
-    State methods;
+    Token function_name;
+    std::vector<std::unique_ptr<Expression>> args;
 };
 
-using StatementValue = std::variant<Variable, Function, Module>;
-
-struct Statement
+struct MethodCall: Expression
 {
-    StatementType type;
-    StatementValue value;
+    std::unique_ptr<Expression> object;
+    FunctionCall method;
+};
+
+struct Literal: Expression
+{
+    Token literal;
+};
+
+struct Try: Expression
+{
+    Token try_keyword;
+    std::unique_ptr<Expression> try_expr;
 };
 
 #endif
